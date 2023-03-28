@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Decentralized Escrow</title>
+    <script src="./web3.min.js"></script>
+    <script src="./escrow.js"></script>
+</head>
+<body>
+    <h1>Decentralized Escrow</h1>
+    <p>Enter the buyer, seller, amount, release time and arbitrator address below:</p>
+    <form id="escrow-form">
+        <label for="buyer">Buyer:</label>
+        <input type="text" name="buyer" required>
+        <br>
+        <label for="seller">Seller:</label>
+        <input type="text" name="seller" required>
+        <br>
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" required>
+        <br>
+        <label for="release-time">Release Time:</label>
+        <input type="datetime-local" name="release-time" required>
+        <br>
+        <label for="arbitrator">Arbitrator:</label>
+        <input type="text" name="arbitrator" required>
+        <br>
+        <button type="submit">Create Escrow</button>
+    </form>
+    <div id="escrow-address"></div>
+    <div id="escrow-status"></div>
+    <div id="approve
