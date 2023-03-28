@@ -1,0 +1,58 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+contract Escrow {
+    address payable public buyer;
+    address payable public seller;
+    address public arbitrator;
+    uint256 public amount;
+    uint256 public releaseTime;
+    bool public sellerApprove;
+    bool public buyerApprove;
+    bool public released;
+    bool public disputed;
+
+    constructor(address payable _buyer, address payable _seller, uint256 _amount, uint256 _releaseTime, address _arbitrator) payable {
+        require(_buyer != address(0));
+        require(_seller != address(0));
+        require(_buyer != _seller);
+        require(_releaseTime > block.timestamp);
+        buyer = _buyer;
+        seller = _seller;
+        amount = _amount;
+        releaseTime = _releaseTime;
+        arbitrator = _arbitrator;
+    }
+
+    function approve() public {
+        if (msg.sender == buyer) {
+            buyerApprove = true;
+        } else if (msg.sender == seller) {
+            sellerApprove = true;
+        }
+        if (buyerApprove && sellerApprove) {
+            release();
+        }
+    }
+
+    function release() private {
+        require(block.timestamp >= releaseTime);
+        require(!released);
+        released = true;
+        payable(seller).transfer(amount);
+    }
+
+    function dispute() public {
+        require(!disputed);
+        require(msg.sender == arbitrator);
+        disputed = true;
+    }
+
+    function refund() public {
+        require(disputed);
+        require(msg.sender == arbitrator);
+        require(!released);
+        payable(buyer).transfer(amount);
+    }
+}
